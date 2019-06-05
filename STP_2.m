@@ -47,7 +47,7 @@ p1 = plot(0:length(cov_Xk)-1, cov_Xk(1:6, :),'LineWidth', 1.5);
 p2 = plot(0:length(cov_Xk_vypocet)-1, cov_Xk_vypocet(1:6, :), 'black:','LineWidth',1.5);
 title('Autokovarianèní funkce')
 xlabel('Èas [k]')
-legend([p1(1) p1(2) p1(3) p1(4) p1(5) p1(6) p2(1)], 'cov[X_k,X_k]', 'cov[X_k,X_{k+1}]', 'cov[X_k,X_{k+2}]', 'cov[X_k,X_{k+3}]', 'cov[X_k,X_{k+4}]', 'cov[X_k,X_{k+5}]', 'Vypoètené')
+legend([p1(1) p1(2) p1(3) p1(4) p1(5) p1(6) p2(1)], 'COV[X_k,X_k]', 'COV[X_k,X_{k+1}]', 'COV[X_k,X_{k+2}]', 'COV[X_k,X_{k+3}]', 'COV[X_k,X_{k+4}]', 'COV[X_k,X_{k+5}]', 'Teoretické hodnoty \newline jednotlivých COV[X_k,X_{k+\tau}]')
 %% 2
 clear
 M = 10^4;
@@ -100,7 +100,7 @@ p1 = plot(0:length(cov_Xk)-1, cov_Xk(1:6, :),'LineWidth', 1.5);
 p2 = plot(0:length(cov_Xk_vypocet)-1, cov_Xk_vypocet(1:6, :), 'black:','LineWidth',1.5);
 title('Autokovarianèní funkce')
 xlabel('Èas [k]')
-legend([p1(1) p1(2) p1(3) p1(4) p1(5) p1(6) p2(1)], 'cov[X_k,X_k]', 'cov[X_k,X_{k+1}]', 'cov[X_k,X_{k+2}]', 'cov[X_k,X_{k+3}]', 'cov[X_k,X_{k+4}]', 'cov[X_k,X_{k+5}]', 'Vypoètené')
+legend([p1(1) p1(2) p1(3) p1(4) p1(5) p1(6) p2(1)], 'COV[X_k,X_k]', 'COV[X_k,X_{k+1}]', 'COV[X_k,X_{k+2}]', 'COV[X_k,X_{k+3}]', 'COV[X_k,X_{k+4}]', 'COV[X_k,X_{k+5}]', 'Teoretické hodnoty \newline jednotlivých COV[X_k,X_{k+\tau}]')
 
 %% 3
 clear
@@ -152,16 +152,16 @@ var_Xk_vypocet = zeros(1, K);
 E_Zk_vypocet = zeros(1, K);
 var_Zk_vypocet = zeros(1, K);
 
-for k = 1:K
-    E_Xk_vypocet(k) = 0.95^(k-1);
-    E_Zk_vypocet(k) = 5 * (0.95^(k-1));
+for k = 0:K-1
+    E_Xk_vypocet(k+1) = 0.95^k;
+    E_Zk_vypocet(k+1) = 5 * 0.95^k;
     
     suma = 0;
     for n = 0:k-1
         suma = suma + 0.95^(2*n);
     end
-    var_Xk_vypocet(k) = (0.95^(2*(k-1))) * 4 + (0.5^2) * 3 * suma;
-    var_Zk_vypocet(k) = var_Xk_vypocet(k) * 5^2 + 2;
+    var_Xk_vypocet(k+1) = 0.95^(2*k) * 5 + 0.5^2 * 3 * suma;
+    var_Zk_vypocet(k+1) = var_Xk_vypocet(k+1) * 5^2 + 2;
 end
 
 % vykresleni
@@ -172,7 +172,7 @@ p2 = plot(0:length(E_Xk_vypocet)-1, E_Xk_vypocet, 'black:','LineWidth',1.5);
 title('Støedni hodnoty X_k')
 xlabel('Èas [k]')
 ylabel('E[X_k]')
-legend([p1(1) p2(1)], 'Odhadované', 'Vypoètené');
+legend([p1(1) p2(1)], 'Odhadované hodnoty \newline z realizací', 'Teoretické hodnoty \newline z analytického výpoètu');
 
 figure
 hold on
@@ -181,7 +181,7 @@ p2 = plot(0:length(E_Zk_vypocet)-1, E_Zk_vypocet, 'black:','LineWidth',1.5);
 title('Støedni hodnoty Z_k')
 xlabel('Èas [k]')
 ylabel('E[Z_k]')
-legend([p1(1) p2(1)], 'Odhadované', 'Vypoètené')
+legend([p1(1) p2(1)], 'Odhadované hodnoty \newline z realizací', 'Teoretické hodnoty \newline z analytického výpoètu');
 
 figure
 hold on
@@ -189,8 +189,8 @@ p1 = plot(0:length(var_Xk)-1, var_Xk,'LineWidth',1.5);
 p2 = plot(0:length(var_Xk_vypocet)-1, var_Xk_vypocet, 'black:','LineWidth',1.5);
 title('Variance X_k')
 xlabel('Èas [k]')
-ylabel('var[X_k]')
-legend([p1(1) p2(1)], 'Odhadované', 'Vypoètené')
+ylabel('VAR[X_k]')
+legend([p1(1) p2(1)], 'Odhadované hodnoty \newline z realizací', 'Teoretické hodnoty \newline z analytického výpoètu');
 
 figure
 hold on
@@ -198,7 +198,7 @@ p1 = plot(0:length(var_Zk)-1, var_Zk,'LineWidth',1.5);
 p2 = plot(0:length(var_Zk_vypocet)-1, var_Zk_vypocet, 'black:','LineWidth',1.5);
 title('Variance Z_k')
 xlabel('Èas [k]')
-ylabel('var[Z_k]')
-legend([p1(1) p2(1)], 'Odhadované', 'Vypoètené')
+ylabel('VAR[Z_k]')
+legend([p1(1) p2(1)], 'Odhadované hodnoty \newline z realizací', 'Teoretické hodnoty \newline z analytického výpoètu');
 
 
